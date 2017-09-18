@@ -15,25 +15,31 @@ module.exports.fillForm = (event, context, callback) => {
   //
   console.log("event received! ", event)
 
+  const payload = JSON.parse(event.body)
+
+  console.log("payload ", payload)
+
   // start list of args that will be combined into command to imageMagick
   const args = [
     "convert federal-voter-registration_1-25-16_english.png ",
   ]
 
   // process non-signature fields
-  map(event, (data, key) => {
+  map(payload, (data, key) => {
     // if the key is in the imArgsRef, then add data and push to args
+
     if (has(imArgsRef, key) && key !== 'signature') {
       args.push(imArgsRef[key].replace("%###%", data))
+      console.log(key, data, imArgsRef[key].replace("%###%", data))
     }
   })
 
   // Fill form with our without signature
   new Promise((resolve) => {
     // if signature is present it requries an extra render step
-    if (has(event, 'signature')) {
+    if (has(payload, 'signature')) {
       // save signature image
-      writeSignatureToFile(event.signature)
+      writeSignatureToFile(payload.signature)
         // now construct composite -geometry +1227+1237  signatureTest.png - signedForm.png
         .then(() => {
           args.push("miff:-")
@@ -41,6 +47,8 @@ module.exports.fillForm = (event, context, callback) => {
           args.push("composite -geometry +1287+1267 /tmp/renderedSignature.png -")
           resolve()
         })
+    } else {
+      resolve()
     }
 
   })
@@ -85,7 +93,7 @@ module.exports.fillForm = (event, context, callback) => {
             const response = {
               statusCode: 200,
               body: JSON.stringify({
-                filledForm: `https://voter-registration-forms.s3.amazonaws.com/${file}`
+                filledForm: `https://voter-registration-forms.s3.amazonaws.com/${id}.png`
               }),
             };
 
