@@ -29,12 +29,16 @@ provider:
 iamRoleStatements:
   - Effect: "Allow"
     Action:
-      - "s3:ListBucket"
-    Resource: { "Fn::Join" : ["", ["arn:aws:s3:::voter-registration-forms"] ]  }
-  - Effect: "Allow"
-    Action:
-      - "s3:PutObject"
-    Resource: { "Fn::Join" : ["", ["arn:aws:s3:::voter-registration-forms/*"] ]  }
+      - "s3:*"
+    Resource: arn:aws:s3:::voter-registration-forms/*
+  # - Effect: "Allow"
+  #   Action:
+  #     - "s3:ListBucket"
+  #   Resource: { "Fn::Join" : ["", ["arn:aws:s3:::voter-registration-forms"] ]  }
+  # - Effect: "Allow"
+  #   Action:
+  #     - "s3:PutObject"
+  #   Resource: { "Fn::Join" : ["", ["arn:aws:s3:::voter-registration-forms/*"] ]  }
 
 # you can define service wide environment variables here
 #  environment:
