@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 const writeSignatureToFile = (dataUrl) => new Promise((resolve, reject) => {
-  fs.writeFile("renderedSignature.png", dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (err) => {
+  fs.writeFile("/tmp/renderedSignature.png", dataUrl.replace(/^data:image\/png;base64,/, ""), 'base64', (err) => {
     if (err) reject(err);
     else resolve();
   });

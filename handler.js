@@ -38,7 +38,7 @@ module.exports.fillForm = (event, context, callback) => {
         .then(() => {
           args.push("miff:-")
           args.push("|")
-          args.push("composite -geometry +1287+1267 renderedSignature.png -")
+          args.push("composite -geometry +1287+1267 /tmp/renderedSignature.png -")
           resolve()
         })
     }
@@ -47,7 +47,7 @@ module.exports.fillForm = (event, context, callback) => {
     .then(() => {
       // generate uuid for file storage
       const id = uuid();
-      const file = `tmp/${id}.png`
+      const file = `/tmp/${id}.png`
       args.push(file)
       exec(args.join(' '), (error, stdout, stderr) => {
         console.log(`stdout: ${stdout}`);
@@ -72,9 +72,11 @@ module.exports.fillForm = (event, context, callback) => {
         uploadParams.Key = path.basename(file);
 
         // Create S3 service object
+        console.log("connecting to s3")
         const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
         // call S3 to retrieve upload file to specified bucket
+        console.log("uploading")
         s3.upload(uploadParams, (err, data) => {
           if (err) {
             console.log("Error", err);
