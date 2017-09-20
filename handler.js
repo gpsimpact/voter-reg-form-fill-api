@@ -21,7 +21,7 @@ module.exports.fillForm = (event, context, callback) => {
 
   // start list of args that will be combined into command to imageMagick
   const args = [
-    "convert federal-voter-registration_1-25-16_english.png ",
+    "convert federal-voter-registration_1-25-16_english_200.png ",
   ]
 
   // process non-signature fields
